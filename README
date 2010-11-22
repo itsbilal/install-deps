@@ -1,0 +1,8 @@
+To install this script, please run this command as root:
+
+python setup.py install
+
+
+Running it is equally simple, run the command install-deps as root:
+
+install-deps DEBFILENAME.deb

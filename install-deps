@@ -1,0 +1,27 @@
+#! /usr/bin/env python
+
+import os
+import re
+import sys
+import subprocess
+
+class installdeps:
+	def __init__ (self):
+		self.debfilename = sys.argv[1]
+		self.deps = os.popen('dpkg-deb -f '+self.debfilename+' "Depends"').read().strip()
+		self.installdeps(self.extractdeps())
+
+	def extractdeps(self):
+		extracted = re.sub('\([ \-\Bdfsg\B\Bubuntu\B<>=0-9\.:]*\)','',self.deps)
+		extracted = extracted.replace(',','')
+		extracted = extracted.replace('\n','')
+		extracted = extracted.replace('|','')
+		return extracted 
+
+	def installdeps(self, deps):
+		process = subprocess.Popen('apt-get install '+deps, shell=True, close_fds=True)
+		process.wait()
+		sys.exit()
+
+if __name__ == '__main__':
+	installdeps()
