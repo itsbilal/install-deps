@@ -12,11 +12,11 @@ class installdeps:
 		self.installdeps(self.extractdeps())
 
 	def extractdeps(self):
-		extracted = re.sub('\([ \-\Bdfsg\B\Bubuntu\B<>=0-9\.:]*\)','',self.deps)
-		extracted = extracted.replace(',','')
-		extracted = extracted.replace('\n','')
-		extracted = extracted.replace('|','')
-		return extracted 
+		extracted_list = self.deps.replace('\n','').replace('|',',').split(',')
+		new_list = []
+		for extracted_each in extracted_list:
+			new_list.append(re.sub('\(.*\)','',extracted_each))
+		return " ".join(new_list)
 
 	def installdeps(self, deps):
 		process = subprocess.Popen('apt-get install '+deps, shell=True, close_fds=True)
